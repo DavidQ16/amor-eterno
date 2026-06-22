@@ -5,7 +5,7 @@
 
 const CONFIG = {
   // Número de WhatsApp con indicativo (57 + 10 dígitos, sin espacios ni +)
-  whatsapp: "573023252274",
+  whatsapp: "573214946953",
 
   // Contraseña del panel de administración
   adminPassword: "Admin1628.",
