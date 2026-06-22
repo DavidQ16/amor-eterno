@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Amor Eterno</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --vino: #5C1A2E; --vino-osc: #3D0F1E; --rosa: #A85070;
+      --polvo: #DEB8C5; --champagne: #F5EDEA; --dorado: #C4965A;
+      --dorado-cl: #DEB882; --tinta: #1A0A12; --blanco: #FFFFFF;
+      --display: "Cormorant Garamond", serif;
+      --cuerpo: "DM Sans", sans-serif;
+      --radio: 14px; --radio-sm: 8px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { font-family: var(--cuerpo); background: var(--champagne); color: var(--tinta); -webkit-font-smoothing: antialiased; }
+
+    /* ===== PANTALLA DE LOGIN ===== */
+    #pantalla-login {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(ellipse at 10% 60%, rgba(92,26,46,0.9)  0%, transparent 55%),
+        radial-gradient(ellipse at 85% 20%, rgba(168,80,112,0.55) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 85%, rgba(196,150,90,0.4) 0%, transparent 45%),
+        #1E0F16;
+    }
+
+    .login-card {
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 22px;
+      padding: 44px 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    }
+
+    .login-logo {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: var(--blanco);
+      line-height: 1;
+    }
+    .login-logo span { color: var(--dorado-cl); }
+
+    .login-sub {
+      font-size: 0.78rem;
+      color: var(--polvo);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-top: 6px;
+      font-weight: 600;
+      opacity: 0.8;
+    }
+
+    .login-separador {
+      width: 40px; height: 1px;
+      background: rgba(222,184,194,0.35);
+      margin: 24px auto;
+    }
+
+    .campo-grupo { text-align: left; margin-bottom: 16px; }
+
+    .campo-grupo label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--polvo);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 7px;
+    }
+
+    .campo-grupo input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radio-sm);
+      color: var(--blanco);
+      font-family: var(--cuerpo);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .campo-grupo input::placeholder { color: rgba(255,255,255,0.3); }
+    .campo-grupo input:focus {
+      border-color: rgba(222,184,194,0.6);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      background: var(--dorado);
+      color: var(--vino-osc);
+      border: none;
+      border-radius: var(--radio-sm);
+      font-family: var(--cuerpo);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-login:hover { background: var(--dorado-cl); transform: translateY(-1px); }
+    .btn-login:active { transform: translateY(0); }
+
+    .login-error {
+      color: #FF9BAA;
+      font-size: 0.82rem;
+      margin-top: 10px;
+      min-height: 20px;
+      text-align: center;
+    }
+
+    .login-volver {
+      display: block;
+      margin-top: 22px;
+      font-size: 0.78rem;
+      color: rgba(222,184,194,0.6);
+      transition: color 0.2s;
+    }
+    .login-volver:hover { color: var(--polvo); }
+
+    /* ===== DASHBOARD ===== */
+    #pantalla-dashboard { display: none; min-height: 100vh; }
+
+    .dash-header {
+      background: var(--vino-osc);
+      color: var(--polvo);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .dash-logo {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.4rem;
+      color: var(--dorado-cl);
+    }
+
+    .dash-header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+    .btn-sm {
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: var(--cuerpo);
+      transition: opacity 0.2s;
+    }
+    .btn-sm:hover { opacity: 0.85; }
+
+    .btn-cerrar {
+      background: rgba(255,255,255,0.1);
+      color: var(--polvo);
+      border: 1px solid rgba(255,255,255,0.15) !important;
+    }
+
+    .btn-primario { background: var(--dorado); color: var(--vino-osc); }
+    .btn-peligro  { background: #b03040; color: var(--blanco); }
+
+    /* Token de GitHub */
+    .token-bar {
+      background: var(--vino);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .token-bar label {
+      color: var(--polvo);
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .token-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: var(--blanco);
+      font-size: 0.82rem;
+      font-family: monospace;
+    }
+    .token-input::placeholder { color: rgba(255,255,255,0.35); }
+    .token-input:focus { outline: none; border-color: var(--dorado-cl); }
+
+    .token-estado {
+      font-size: 0.78rem;
+      color: var(--polvo);
+      white-space: nowrap;
+    }
+    .token-estado.ok { color: #7EE8A2; }
+    .token-estado.error { color: #FF9BAA; }
+
+    /* Contenido del dashboard */
+    .dash-body {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .dash-titulo {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.6rem;
+      color: var(--vino);
+      margin-bottom: 20px;
+    }
+
+    /* Formulario de nuevo producto */
+    .form-producto {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      border: 1px solid rgba(92,26,46,0.1);
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 12px rgba(58,10,30,0.07);
+      display: none;
+    }
+    .form-producto.abierto { display: block; }
+
+    .form-titulo {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--vino);
+      margin-bottom: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 540px) { .form-grid { grid-template-columns: 1fr; } }
+
+    .form-campo { display: flex; flex-direction: column; gap: 5px; }
+    .form-campo.full { grid-column: 1/-1; }
+
+    .form-campo label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--rosa);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .form-campo input,
+    .form-campo select,
+    .form-campo textarea {
+      padding: 10px 13px;
+      border: 1.5px solid rgba(92,26,46,0.15);
+      border-radius: var(--radio-sm);
+      font-family: var(--cuerpo);
+      font-size: 0.9rem;
+      color: var(--tinta);
+      outline: none;
+      background: var(--champagne);
+      transition: border-color 0.2s;
+    }
+    .form-campo input:focus,
+    .form-campo select:focus,
+    .form-campo textarea:focus { border-color: var(--vino); }
+
+    .form-campo textarea { resize: vertical; min-height: 70px; }
+
+    .form-acciones {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    /* Lista de productos */
+    .lista-productos { display: flex; flex-direction: column; gap: 10px; }
+
+    .item-producto {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      border: 1px solid rgba(92,26,46,0.08);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 1px 6px rgba(58,10,30,0.06);
+    }
+
+    .item-icono { font-size: 1.4rem; flex-shrink: 0; }
+
+    .item-info { flex: 1; min-width: 0; }
+
+    .item-nombre {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--tinta);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-meta {
+      font-size: 0.78rem;
+      color: var(--rosa);
+      margin-top: 2px;
+    }
+
+    .item-precio {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      color: var(--vino);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .item-acciones { display: flex; gap: 7px; flex-shrink: 0; }
+
+    .btn-icono {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.15s, opacity 0.2s;
+    }
+    .btn-icono:hover { transform: scale(1.1); }
+
+    .btn-editar  { background: var(--champagne); color: var(--vino); }
+    .btn-borrar  { background: #FFF0F0;           color: #b03040;    }
+
+    /* Notificación toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--vino-osc);
+      color: var(--blanco);
+      padding: 11px 22px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 999;
+      white-space: nowrap;
+    }
+    #toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: var(--blanco);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .cargando-msg {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--rosa);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== PANTALLA DE LOGIN ===== -->
+<div id="pantalla-login">
+  <div class="login-card">
+    <h1 class="login-logo">Amor <span>Eterno</span></h1>
+    <p class="login-sub">Panel de administración</p>
+    <div class="login-separador"></div>
+
+    <div class="campo-grupo">
+      <label for="inp-password">Contraseña</label>
+      <input type="password" id="inp-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+
+    <button class="btn-login" id="btn-entrar">Entrar al panel</button>
+    <p class="login-error" id="login-error"></p>
+    <a class="login-volver" href="index.html">← Volver a la tienda</a>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="pantalla-dashboard">
+
+  <header class="dash-header">
+    <span class="dash-logo">✦ Amor Eterno</span>
+    <div class="dash-header-right">
+      <a href="index.html" class="btn-sm btn-cerrar">Ver tienda</a>
+      <button class="btn-sm btn-cerrar" id="btn-cerrar-sesion">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <!-- Barra de token GitHub -->
+  <div class="token-bar">
+    <label for="inp-token">🔑 Token GitHub:</label>
+    <input type="password" class="token-input" id="inp-token"
+           placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+           autocomplete="off">
+    <button class="btn-sm btn-primario" id="btn-conectar">Conectar</button>
+    <span class="token-estado" id="token-estado">Sin conectar</span>
+  </div>
+
+  <div class="dash-body">
+    <p style="font-size:0.8rem;color:var(--rosa);margin-bottom:24px;line-height:1.5;">
+      Para usar el panel: en GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → New. Dale acceso de lectura/escritura al repo <strong>amor-eterno</strong>. Pega el token arriba y haz clic en Conectar.
+    </p>
+
+    <!-- Botón agregar -->
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+      <h2 class="dash-titulo" style="margin:0;">Productos</h2>
+      <button class="btn-sm btn-primario" id="btn-nuevo-producto">+ Agregar producto</button>
+    </div>
+
+    <!-- Formulario nuevo/editar producto -->
+    <div class="form-producto" id="form-producto">
+      <p class="form-titulo" id="form-titulo">Nuevo producto</p>
+      <input type="hidden" id="campo-id-edicion">
+      <div class="form-grid">
+        <div class="form-campo">
+          <label>ID único</label>
+          <input type="text" id="campo-id" placeholder="ej: nidito-003">
+        </div>
+        <div class="form-campo">
+          <label>Categoría</label>
+          <select id="campo-categoria">
+            <option value="nidito">🧶 Nidito de Amor</option>
+            <option value="lumina">💄 Lúmina</option>
+            <option value="detalles">🎁 Detalles</option>
+            <option value="ropa">👕 Ropa Colombia</option>
+            <option value="servicios">✂️ Servicios</option>
+          </select>
+        </div>
+        <div class="form-campo">
+          <label>Nombre del producto</label>
+          <input type="text" id="campo-nombre" placeholder="ej: Amigurumi oso">
+        </div>
+        <div class="form-campo">
+          <label>Precio (sin puntos)</label>
+          <input type="number" id="campo-precio" placeholder="35000">
+        </div>
+        <div class="form-campo full">
+          <label>Ruta de imagen (opcional)</label>
+          <input type="text" id="campo-imagen" placeholder="img/nidito/nombre-foto.jpg">
+        </div>
+        <div class="form-campo full">
+          <label>Descripción</label>
+          <textarea id="campo-descripcion" placeholder="Breve descripción del producto..."></textarea>
+        </div>
+      </div>
+      <div class="form-acciones">
+        <button class="btn-sm btn-primario" id="btn-guardar-producto">Guardar en GitHub</button>
+        <button class="btn-sm btn-cerrar" id="btn-cancelar-form">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- Lista de productos -->
+    <div class="lista-productos" id="lista-productos">
+      <p class="cargando-msg">Conecta tu token de GitHub para ver y editar los productos.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de notificaciones -->
+<div id="toast"></div>
+
+<script src="js/config.js"></script>
+<script>
+  // ===== ESTADO =====
+  let ghToken   = sessionStorage.getItem("ae_gh_token") || "";
+  let fileSHA   = "";
+  let productos  = [];
+  let modoEdicion = false;
+
+  const API = `https://api.github.com/repos/${CONFIG.githubUser}/${CONFIG.githubRepo}/contents/js/productos.js`;
+
+  // ===== TOAST =====
+  function toast(msg, dur = 3000) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("visible");
+    setTimeout(() => el.classList.remove("visible"), dur);
+  }
+
+  // ===== LOGIN =====
+  document.getElementById("btn-entrar").addEventListener("click", () => {
+    const pw = document.getElementById("inp-password").value;
+    if (pw === CONFIG.adminPassword) {
+      document.getElementById("pantalla-login").style.display = "none";
+      document.getElementById("pantalla-dashboard").style.display = "block";
+      if (ghToken) {
+        document.getElementById("inp-token").value = "••••••••••••••••";
+        document.getElementById("token-estado").textContent = "Token guardado en sesión";
+        document.getElementById("token-estado").className = "token-estado ok";
+        cargarProductos();
+      }
+    } else {
+      document.getElementById("login-error").textContent = "Contraseña incorrecta.";
+    }
+  });
+
+  document.getElementById("inp-password").addEventListener("keydown", e => {
+    if (e.key === "Enter") document.getElementById("btn-entrar").click();
+  });
+
+  document.getElementById("btn-cerrar-sesion").addEventListener("click", () => {
+    sessionStorage.removeItem("ae_gh_token");
+    location.reload();
+  });
+
+  // ===== GITHUB TOKEN =====
+  document.getElementById("btn-conectar").addEventListener("click", async () => {
+    const t = document.getElementById("inp-token").value.trim();
+    if (!t || t.startsWith("•")) return;
+    ghToken = t;
+    sessionStorage.setItem("ae_gh_token", t);
+    const estado = document.getElementById("token-estado");
+    estado.textContent = "Verificando...";
+    estado.className = "token-estado";
+    await cargarProductos();
+  });
+
+  // ===== CARGAR PRODUCTOS DESDE GITHUB =====
+  async function cargarProductos() {
+    const lista = document.getElementById("lista-productos");
+    lista.innerHTML = `<p class="cargando-msg"><span class="spinner"></span>Cargando desde GitHub...</p>`;
+
+    try {
+      const res = await fetch(API, {
+        headers: {
+          "Authorization": `Bearer ${ghToken}`,
+          "Accept": "application/vnd.github+json"
+        }
+      });
+
+      if (res.status === 401) {
+        throw new Error("Token inválido o sin permisos.");
+      }
+      if (!res.ok) throw new Error(`Error ${res.status}`);
+
+      const data = await res.json();
+      fileSHA = data.sha;
+      const contenido = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
+
+      // Parsear el array PRODUCTOS del archivo JS
+      const match = contenido.match(/const PRODUCTOS\s*=\s*(\[[\s\S]*?\]);/);
+      if (!match) throw new Error("No encontré la lista de productos en el archivo.");
+
+      productos = new Function("return " + match[1])();
+
+      document.getElementById("token-estado").textContent = `✓ Conectado — ${productos.length} productos`;
+      document.getElementById("token-estado").className = "token-estado ok";
+
+      renderizarLista();
+    } catch (err) {
+      document.getElementById("token-estado").textContent = err.message;
+      document.getElementById("token-estado").className = "token-estado error";
+      lista.innerHTML = `<p class="cargando-msg" style="color:#b03040;">${err.message}</p>`;
+    }
+  }
+
+  // ===== RENDER LISTA =====
+  const ICONOS_CAT = { nidito:"🧶", lumina:"💄", detalles:"🎁", ropa:"👕", servicios:"✂️" };
+  const NOMBRE_CAT = { nidito:"Nidito de Amor", lumina:"Lúmina", detalles:"Detalles", ropa:"Ropa Colombia", servicios:"Servicios" };
+
+  function formatPrecio(v) { return "$" + Number(v).toLocaleString("es-CO"); }
+
+  function renderizarLista() {
+    const lista = document.getElementById("lista-productos");
+    if (productos.length === 0) {
+      lista.innerHTML = `<p class="cargando-msg">No hay productos aún. ¡Agrega el primero!</p>`;
+      return;
+    }
+    lista.innerHTML = "";
+    productos.forEach((p, i) => {
+      const div = document.createElement("div");
+      div.className = "item-producto";
+      div.innerHTML = `
+        <span class="item-icono">${ICONOS_CAT[p.categoria] || "📦"}</span>
+        <div class="item-info">
+          <p class="item-nombre">${p.nombre}</p>
+          <p class="item-meta">${NOMBRE_CAT[p.categoria] || p.categoria} · ${p.descripcion ? p.descripcion.slice(0,50)+"..." : "Sin descripción"}</p>
+        </div>
+        <span class="item-precio">${formatPrecio(p.precio)}</span>
+        <div class="item-acciones">
+          <button class="btn-icono btn-editar" title="Editar" data-i="${i}">✏️</button>
+          <button class="btn-icono btn-borrar" title="Eliminar" data-i="${i}">🗑️</button>
+        </div>`;
+      lista.appendChild(div);
+    });
+
+    lista.querySelectorAll(".btn-editar").forEach(btn =>
+      btn.addEventListener("click", () => abrirEdicion(parseInt(btn.dataset.i))));
+    lista.querySelectorAll(".btn-borrar").forEach(btn =>
+      btn.addEventListener("click", () => confirmarBorrar(parseInt(btn.dataset.i))));
+  }
+
+  // ===== GUARDAR EN GITHUB =====
+  async function guardarEnGitHub(mensaje) {
+    const headerComentario = `// ============================================
+// PRODUCTOS — Amor Eterno
+// Para agregar un producto nuevo, copia un bloque { ... } completo,
+// pégalo antes del corchete final ] y cambia los datos.
+//
+// CATEGORÍAS VÁLIDAS: "nidito" | "lumina" | "detalles" | "ropa" | "servicios"
+// ============================================\n\nconst PRODUCTOS = `;
+
+    const nuevoContenido = headerComentario + JSON.stringify(productos, null, 2) + ";\n";
+    const encoded = btoa(unescape(encodeURIComponent(nuevoContenido)));
+
+    const res = await fetch(API, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${ghToken}`,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: mensaje, content: encoded, sha: fileSHA })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "Error al guardar");
+    }
+
+    const data = await res.json();
+    fileSHA = data.content.sha;
+  }
+
+  // ===== FORMULARIO =====
+  document.getElementById("btn-nuevo-producto").addEventListener("click", () => {
+    modoEdicion = false;
+    limpiarForm();
+    document.getElementById("form-titulo").textContent = "Nuevo producto";
+    document.getElementById("form-producto").classList.add("abierto");
+    document.getElementById("campo-id").focus();
+  });
+
+  document.getElementById("btn-cancelar-form").addEventListener("click", () => {
+    document.getElementById("form-producto").classList.remove("abierto");
+  });
+
+  function limpiarForm() {
+    ["campo-id","campo-nombre","campo-precio","campo-imagen","campo-descripcion"].forEach(id => {
+      document.getElementById(id).value = "";
+    });
+    document.getElementById("campo-categoria").value = "nidito";
+    document.getElementById("campo-id-edicion").value = "";
+    document.getElementById("campo-id").disabled = false;
+  }
+
+  function abrirEdicion(i) {
+    modoEdicion = true;
+    const p = productos[i];
+    document.getElementById("campo-id-edicion").value = i;
+    document.getElementById("campo-id").value = p.id;
+    document.getElementById("campo-id").disabled = true;
+    document.getElementById("campo-categoria").value = p.categoria;
+    document.getElementById("campo-nombre").value = p.nombre;
+    document.getElementById("campo-precio").value = p.precio;
+    document.getElementById("campo-imagen").value = p.imagen || "";
+    document.getElementById("campo-descripcion").value = p.descripcion || "";
+    document.getElementById("form-titulo").textContent = "Editar producto";
+    document.getElementById("form-producto").classList.add("abierto");
+    document.getElementById("campo-nombre").focus();
+  }
+
+  document.getElementById("btn-guardar-producto").addEventListener("click", async () => {
+    const id   = document.getElementById("campo-id").value.trim();
+    const cat  = document.getElementById("campo-categoria").value;
+    const nom  = document.getElementById("campo-nombre").value.trim();
+    const prec = parseInt(document.getElementById("campo-precio").value);
+    const img  = document.getElementById("campo-imagen").value.trim();
+    const desc = document.getElementById("campo-descripcion").value.trim();
+
+    if (!id || !nom || !prec) {
+      toast("❌ ID, nombre y precio son obligatorios.");
+      return;
+    }
+
+    const nuevoP = { id, categoria: cat, nombre: nom, precio: prec, imagen: img, descripcion: desc };
+
+    if (modoEdicion) {
+      const i = parseInt(document.getElementById("campo-id-edicion").value);
+      productos[i] = nuevoP;
+    } else {
+      if (productos.find(p => p.id === id)) {
+        toast("❌ Ya existe un producto con ese ID.");
+        return;
+      }
+      productos.push(nuevoP);
+    }
+
+    const btn = document.getElementById("btn-guardar-producto");
+    btn.innerHTML = '<span class="spinner"></span>Guardando...';
+    btn.disabled = true;
+
+    try {
+      await guardarEnGitHub(modoEdicion ? `Editar: ${nom}` : `Agregar: ${nom}`);
+      toast(`✅ ${modoEdicion ? "Producto editado" : "Producto agregado"}. GitHub Pages actualizará en ~1 min.`);
+      document.getElementById("form-producto").classList.remove("abierto");
+      renderizarLista();
+    } catch (err) {
+      toast("❌ Error al guardar: " + err.message);
+      // Revertir
+      if (modoEdicion) {
+        const i = parseInt(document.getElementById("campo-id-edicion").value);
+        cargarProductos(); // recargar estado real
+      } else {
+        productos.pop();
+      }
+    } finally {
+      btn.innerHTML = "Guardar en GitHub";
+      btn.disabled = false;
+    }
+  });
+
+  async function confirmarBorrar(i) {
+    const p = productos[i];
+    if (!confirm(`¿Eliminar "${p.nombre}"? Esta acción se publicará en el sitio.`)) return;
+    productos.splice(i, 1);
+    try {
+      await guardarEnGitHub(`Eliminar: ${p.nombre}`);
+      toast(`🗑️ "${p.nombre}" eliminado. Sitio actualiza en ~1 min.`);
+      renderizarLista();
+    } catch (err) {
+      toast("❌ Error: " + err.message);
+      cargarProductos();
+    }
+  }
+</script>
+</body>
+</html>

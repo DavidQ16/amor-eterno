@@ -1,0 +1,25 @@
+CÓMO SUBIR FOTOS
+=================
+
+1. Cada categoría ya tiene su carpeta aquí dentro:
+   img/nidito/
+   img/lumina/
+   img/detalles/
+   img/ropa/
+   img/servicios/
+   img/marca/   <- para el logo o foto del hero, si se agrega después
+
+2. Copia la foto del producto dentro de la carpeta que le corresponda.
+   Nombra el archivo sin espacios ni tildes, ejemplo:
+   pulpo-rosado.jpg
+   cobija-crochet.jpg
+
+3. Abre js/productos.js y en el producto correspondiente escribe la ruta
+   en el campo "imagen", ejemplo:
+
+   imagen: "img/nidito/pulpo-rosado.jpg"
+
+4. Guarda y sube los cambios a GitHub. Listo, la foto aparece sola.
+
+Tamaño recomendado: fotos cuadradas o 4:3, máximo 1200px de ancho
+(para que la página cargue rápido en el celular del cliente).
